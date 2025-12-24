@@ -1,0 +1,84 @@
+name: Full CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    name: Build Stage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Prepare build environment
+        run: |
+          echo "Preparing build environment..."
+          echo "Environment ready"
+
+      - name: Compile / Build project
+        run: |
+          echo "Building project..."
+          echo "Build completed successfully"
+
+  testing:
+    name: Testing Stage
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Run unit tests
+        run: |
+          echo "Executing unit tests..."
+          echo "All tests passed"
+
+      - name: Run integration tests
+        run: |
+          echo "Executing integration tests..."
+          echo "Integration tests passed"
+
+  packaging:
+    name: Packaging Stage
+    runs-on: ubuntu-latest
+    needs: testing
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Create build artifacts
+        run: |
+          echo "Creating build artifacts..."
+          mkdir -p dist
+          echo "Sample artifact" > dist/artifact.txt
+
+      - name: Verify package
+        run: |
+          echo "Verifying package integrity..."
+          ls -la dist
+
+  deploy:
+    name: Deployment Stage
+    runs-on: ubuntu-latest
+    needs: packaging
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Deploy to environment
+        run: |
+          echo "Starting deployment..."
+          echo "Application deployed successfully"
+
+      - name: Post-deployment check
+        run: |
+          echo "Running post-deployment checks..."
+          echo "Deployment verified"
+
+        run: |
+          echo "Deploying application..."
+          echo "Deployment successful"
