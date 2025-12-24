@@ -52,7 +52,6 @@ jobs:
 
       - name: Create build artifacts
         run: |
-          echo "Creating build artifacts..."
           mkdir -p dist
           echo "Sample artifact" > dist/artifact.txt
 
@@ -60,6 +59,12 @@ jobs:
         run: |
           echo "Verifying package integrity..."
           ls -la dist
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
 
   deploy:
     name: Deployment Stage
@@ -74,11 +79,12 @@ jobs:
           echo "Starting deployment..."
           echo "Application deployed successfully"
 
-      - name: Post-deployment check
+      - name: Create deployment marker
         run: |
-          echo "Running post-deployment checks..."
-          echo "Deployment verified"
+          echo "Deployment completed at $(date)" > deployment.txt
 
-        run: |
-          echo "Deploying application..."
-          echo "Deployment successful"
+      - name: Upload deployment log
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-log
+          path: deployment.txt
